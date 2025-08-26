@@ -17,17 +17,17 @@ header {
     text-align: center;
 }
 
-header>h1 {
+header > h1 {
     font-size: 1.25rem;
     font-weight: 500;
     color: #F9F4DA;
 }
 
-header>p {
+header > p {
     font-size: 0.875rem;
     max-width: 350px;
     color: #8E8E8E;
-    margin-left: 45px;
+    margin-left: 50px;
 }
 
 section.game-status {
@@ -40,11 +40,11 @@ section.game-status {
     margin-block: 30px;
 }
 
-section.game-status>p {
+section.game-status > p {
     margin: 5px;
 }
 
-section.game-status>h2 {
+section.game-status > h2 {
     font-size: 1.25rem;
     margin: 5px
 }
@@ -56,12 +56,28 @@ section.language-chips {
     justify-content: center;
     max-width: 350px;
     margin-bottom: 36px;
-    margin-left: 45px;
+    margin-left: 50px;
 }
 
 span.chip {
     border-radius: 3px;
     padding: 4.5px;
+    position: relative;
+}
+
+/* Dimmed overlay with skull on "lost" languages */
+span.chip.lost::before {
+    content: "💀";
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    font-size: 0.85rem;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 section.word {
@@ -71,7 +87,7 @@ section.word {
     margin-bottom: 20px;
 }
 
-section.word>span {
+section.word > span {
     height: 40px;
     width: 40px;
     background-color: #323232;
@@ -91,8 +107,7 @@ section.keyboard {
     margin-bottom: 36px;
 }
 
-
-section.keyboard>button {
+section.keyboard > button {
     height: 35px;
     width: 35px;
     background-color: #FCBA29;
@@ -101,11 +116,11 @@ section.keyboard>button {
     cursor: pointer;
 }
 
-section.keyboard>button.correct {
+section.keyboard > button.correct {
     background-color: #10A95B;
 }
 
-section.keyboard>button.wrong {
+section.keyboard > button.wrong {
     background-color: #EC5D49;
 }
 

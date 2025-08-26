@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { languages } from './Language'
 import clsx from "clsx"
+import getFarewellText from './Utility'
 
 function AssemblyEndgame() {
     // state: jis word ko guess karna hai
@@ -9,11 +10,18 @@ function AssemblyEndgame() {
     // state: user ne ab tak kaunse letters guess kiye
     const [guessedLetters, setGuessedLetters] = useState([])
 
+
+
     // derived value: galat guesses count karna
-    const wrongGuessCount = 
+    const wrongGuessCount =
         guessedLetters.filter(letter => !currentWord.includes(letter)).length
-    console.log(wrongGuessCount)
-    
+    const isgameWin = currentWord.split("").every(letter => guessedLetters.includes(letter))
+    const isgameLoss = wrongGuessCount >= languages.length - 1
+    const isgameOver = isgameWin || isgameLoss
+    const lastGuessedLetter = guessedLetters[guessedLetters.length - 1]
+    const isLastGuessIncorrect = lastGuessedLetter && !currentWord.includes(lastGuessedLetter)
+
+
     // alphabet string jisse keyboard banega
     const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
@@ -28,7 +36,7 @@ function AssemblyEndgame() {
     }
 
     // programming languages chips ko render karna
-    const languageElements = languages.map((lang ,index) => {
+    const languageElements = languages.map((lang, index) => {
         const isLanguageLost = index < wrongGuessCount
         const styles = {
             backgroundColor: lang.backgroundColor,
@@ -63,20 +71,53 @@ function AssemblyEndgame() {
         const iswrong = isInclude && !currentWord.includes(letter)
         // clsx se dynamic class add karna
         const className = clsx({
-            correct : iscorrect,
-            wrong : iswrong
+            correct: iscorrect,
+            wrong: iswrong
         })
 
-        return(
+        return (
             <button
-                className = { className } 
-                key = { letter }
-                onClick = {() => addGuessedLetter(letter)}
+                className={className}
+                key={letter}
+                onClick={() => addGuessedLetter(letter)}
             >
-                { letter.toUpperCase() }
+                {letter.toUpperCase()}
             </button >
         )
     })
+    const gamestatusClass = clsx("game-status", {
+        won: isgameWin,
+        lost: isgameLoss,
+        farewell: !isgameOver && isLastGuessIncorrect
+    })
+    function renderGameStatus(language) {
+        if (!isgameOver && isLastGuessIncorrect) {
+            return (
+                <p
+                    className="farewell-message"
+                >
+                    {getFarewellText(languages[wrongGuessCount - 1].name)}
+                </p>
+            )
+        }
+
+        if (isgameWin) {
+            return (
+                <>
+                    <h2>You win!</h2>
+                    <p>Well done! 🎉</p>
+                </>
+            )
+        } if (isgameLoss) {
+            return (
+                <>
+                    <h2>Game over!</h2>
+                    <p>You lose! Better start learning Assembly 😭</p>
+                </>
+            )
+        }
+        return null
+    }
 
     return (
         <main>
@@ -88,9 +129,8 @@ function AssemblyEndgame() {
             </header>
 
             {/* game status (static abhi ke liye) */}
-            <section className="game-status">
-                <h2>You win!</h2>
-                <p>Well done! 🎉</p>
+            <section className={gamestatusClass}>
+                {renderGameStatus()}
             </section>
 
             {/* programming language chips */}
@@ -109,7 +149,7 @@ function AssemblyEndgame() {
             </section>
 
             {/* new game button */}
-            <button className="new-game">New Game</button>
+            {isgameOver && <button className="new-game">New Game</button>}
         </main>
     )
 }
